@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Inference Simulators 10 — Further Learning: Books, Courses, Papers, Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Geist+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #1c1815;
+            --bg-card: #231e1a;
+            --bg-code: #2b2520;
+            --text-primary: #efe8dc;
+            --text-secondary: #a2978b;
+            --accent: #aabd59;
+            --accent-dim: #aabd5944;
+            --accent-glow: #aabd5933;
+            --border: #3a322b;
+            --font-display: 'Bricolage Grotesque', sans-serif;
+            --font-mono: 'Geist Mono', 'Geist Mono', monospace;
+            --font-body: 'Instrument Sans', sans-serif;
+            --max-width: 900px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 17px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ── Header ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .series-label {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 .accent {
+            color: var(--accent);
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        /* ── Tag Pills ── */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+            white-space: nowrap;
+        }
+
+        /* ── Pipeline Flow Bar ── */
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            max-width: var(--max-width);
+        }
+
+        .pipeline-step {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .pipeline-arrow {
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        /* ── Slides ── */
+        .slide {
+            min-height: 100vh;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide-number {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--accent-dim);
+            position: absolute;
+            top: 2rem;
+            right: 1.5rem;
+            line-height: 1;
+            user-select: none;
+        }
+
+        .slide h2 {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            line-height: 1.25;
+        }
+
+        .slide h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .slide p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .slide p strong {
+            color: var(--text-primary);
+        }
+
+        .slide ul, .slide ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .slide li {
+            margin-bottom: 0.4rem;
+        }
+
+        .slide li strong {
+            color: var(--text-primary);
+        }
+
+        /* ── Code Blocks ── */
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1.25rem 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(170,189,89,0.08);
+            padding: 0.4rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #dad1c5;
+        }
+
+        /* Syntax highlighting (manual) */
+        .kw { color: #de805a; }
+        .fn { color: #d7bbdf; }
+        .str { color: #bcdbd4; }
+        .cm { color: #a2978b; font-style: italic; }
+        .num { color: #97cdc6; }
+        .type { color: #e3b174; }
+        .dir { color: #de805a; }
+        .mac { color: #e3b174; }
+
+        /* ── Tables ── */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.25rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: var(--bg-code);
+            color: var(--accent);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--font-display);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) td {
+            background: rgba(35,30,26,0.5);
+        }
+
+        /* ── Diagrams ── */
+        .diagram-flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .diagram-box {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .diagram-box.accent {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(170,189,89,0.08);
+        }
+
+        .diagram-box.dim {
+            color: var(--text-secondary);
+            border-color: var(--border);
+        }
+
+        .diagram-arrow {
+            color: var(--accent);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        /* Vertical flow diagrams */
+        .diagram-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .diagram-vertical .diagram-arrow {
+            font-size: 1.1rem;
+        }
+
+        /* Nested hierarchy diagram */
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .hierarchy-level {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .hierarchy-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .hierarchy-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+
+        .hierarchy-item {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .hierarchy-item.accent {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(170,189,89,0.08);
+        }
+
+        /* Grid diagram */
+        .diagram-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .diagram-grid.cols-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .diagram-grid.cols-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .diagram-panel {
+            padding: 1rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        .diagram-panel.accent-border {
+            border-left: 3px solid var(--accent);
+        }
+
+        .diagram-panel h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .diagram-panel p, .diagram-panel ul {
+            font-size: 0.85rem;
+        }
+
+        /* ── Callout Boxes ── */
+        .callout {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+        }
+
+        .callout p {
+            margin-bottom: 0;
+        }
+
+        .callout .callout-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ── Tier Visual ── */
+        .tier-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .tier-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tier-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-width: 90px;
+            text-align: right;
+        }
+
+        .tier-fill {
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            white-space: nowrap;
+            transition: width 0.6s ease;
+        }
+
+        .tier-cost {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            min-width: 70px;
+        }
+
+        /* ── Contents list ── */
+        .contents-list {
+            list-style: none;
+            padding-left: 0;
+            counter-reset: contents;
+        }
+
+        .contents-list li {
+            counter-increment: contents;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contents-list li:last-child {
+            border-bottom: none;
+        }
+
+        .contents-list li::before {
+            content: counter(contents, decimal-leading-zero);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            min-width: 2rem;
+        }
+
+        .contents-list a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contents-list a:hover {
+            color: var(--accent);
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .slide {
+                padding: 3rem 1rem;
+                min-height: auto;
+            }
+
+            .slide-number {
+                font-size: 3rem;
+                top: 1.5rem;
+                right: 1rem;
+            }
+
+            .slide h2 {
+                font-size: 1.5rem;
+            }
+
+            .diagram-grid.cols-2,
+            .diagram-grid.cols-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .pipeline {
+                gap: 0.15rem;
+            }
+
+            .pipeline-step {
+                font-size: 0.6rem;
+                padding: 0.2rem 0.4rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            table {
+                font-size: 0.78rem;
+            }
+
+            .tier-label {
+                min-width: 60px;
+                font-size: 0.65rem;
+            }
+
+            .tier-fill {
+                font-size: 0.6rem;
+                height: 26px;
+            }
+        }
+
+        /* ── Interactive controls (added for Local LLM series) ── */
+        .control-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.25rem 0;
+        }
+        .control-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .control-row label {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            min-width: 180px;
+        }
+        .control-row input[type="range"] {
+            flex: 1;
+            min-width: 160px;
+            accent-color: var(--accent);
+        }
+        .control-row input[type="number"],
+        .control-row select {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 4px;
+            padding: 0.3rem 0.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+        }
+        .control-row .val {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            min-width: 80px;
+            text-align: right;
+        }
+        .btn {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            padding: 0.4rem 0.9rem;
+            background: var(--accent-dim);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .btn:hover { background: rgba(170,189,89,0.2); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn.secondary {
+            background: var(--bg-code);
+            color: var(--text-secondary);
+            border-color: var(--border);
+        }
+        .result-box {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            margin-top: 0.75rem;
+        }
+        .result-box .line-label { color: var(--text-secondary); }
+        .result-box .line-val   { color: var(--accent); font-weight: 600; }
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        .metric {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            text-align: center;
+        }
+        .metric .metric-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .metric .metric-value {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 0.2rem;
+        }
+
+        /* Canvas / SVG containers */
+        .canvas-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.25rem 0;
+            overflow-x: auto;
+        }
+        .canvas-wrap canvas,
+        .canvas-wrap svg {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+        /* Small inline badge */
+        .badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            vertical-align: middle;
+            margin-left: 0.3rem;
+        }
+        .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .badge.warn  { border-color: #e3b174; color: #e3b174; background: rgba(227,177,116,0.08); }
+        .badge.bad   { border-color: #de805a; color: #de805a; background: rgba(222,128,90,0.08); }
+
+
+        /* ── LLM Inference Simulators additions ── */
+        .canvas-wrap canvas { image-rendering: auto; display: block; width: 100%; height: auto; }
+        .canvas-wrap svg { max-width: 100%; height: auto; }
+        .ladder { display: grid; gap: 0.4rem; margin: 1.25rem 0; }
+        .ladder-row {
+            display: grid; grid-template-columns: 11rem 1fr 7.5rem; gap: 0.75rem; align-items: center;
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
+            padding: 0.55rem 0.85rem; font-size: 0.88rem;
+        }
+        .ladder-row .rung { font-family: var(--font-display); font-weight: 600; color: var(--accent); }
+        .ladder-row .speed { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); text-align: right; }
+        .res-list { list-style: none; padding: 0; margin: 0.75rem 0; }
+        .res-list li { padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.92rem; }
+        .res-list li:last-child { border-bottom: none; }
+        .res-list .what { color: var(--text-secondary); display: block; font-size: 0.86rem; margin-top: 0.15rem; }
+        .res-list a { color: var(--accent); text-decoration: none; }
+        .res-list a:hover { text-decoration: underline; }
+        .qa { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; margin: 0.6rem 0; padding: 0.2rem 1rem; }
+        .qa summary { cursor: pointer; padding: 0.6rem 0; font-weight: 600; }
+        .qa p, .qa ul { margin-bottom: 0.75rem; font-size: 0.92rem; }
+        .sim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.4rem 1.25rem; }
+        .chart-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+        .chart-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.3rem; }
+        .slide a { color: var(--accent); }
+        @media (max-width: 640px) {
+            .ladder-row { grid-template-columns: 1fr; gap: 0.2rem; }
+            .ladder-row .speed { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="series-label">LLM Inference Simulators &mdash; Presentation 10</div>
+    <h1>Further <span class="accent">Learning</span></h1>
+    <p class="subtitle">A curated reading list for simulator engineers: textbooks on discrete-event simulation and computer architecture, university courses, the key LLM-serving and simulator papers, and the open-source tools worth reading the source of.</p>
+
+    <div class="tags">
+        <span class="tag">Books</span>
+        <span class="tag">Courses</span>
+        <span class="tag">Papers</span>
+        <span class="tag">Tutorials</span>
+        <span class="tag">Open source</span>
+    </div>
+
+    <div class="pipeline">
+        <span class="pipeline-step">Foundations</span>
+        <span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Architecture</span>
+        <span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">LLM serving</span>
+        <span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Tools</span>
+    </div>
+</header>
+
+<section class="slide" id="slide-00">
+    <div class="slide-number">00</div>
+    <h2>Topics We'll Cover</h2>
+    <ul class="contents-list">
+        <li><a href="#slide-01">A Four-Week Learning Path</a></li>
+        <li><a href="#slide-02">Books: Simulation and Performance Analysis</a></li>
+        <li><a href="#slide-03">Books: Computer and Accelerator Architecture</a></li>
+        <li><a href="#slide-04">Courses and Lecture Series</a></li>
+        <li><a href="#slide-05">Papers: LLM Serving and Disaggregation</a></li>
+        <li><a href="#slide-06">Papers: Simulators and Simulation Methodology</a></li>
+        <li><a href="#slide-07">Hands-On Tutorials and Documentation</a></li>
+        <li><a href="#slide-08">Source Code Worth Reading</a></li>
+        <li><a href="#slide-09">FHE and Photonic Computing</a></li>
+        <li><a href="#slide-11">Power and Energy</a></li>
+        <li><a href="#slide-10">Related Decks on This GitHub</a></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-01">
+    <div class="slide-number">01</div>
+    <h2>A Four-Week Learning Path</h2>
+    <p>One evening a day for four weeks, assuming solid Python and computer architecture already. Each week ends with something built.</p>
+    <div class="table-wrap">
+    <table>
+        <tr><th>Week</th><th>Read</th><th>Build</th></tr>
+        <tr><td><strong>1. Simulation craft</strong></td><td>SimPy docs; Harchol-Balter ch. 1&ndash;6 (queueing basics); Lazowska <em>QSP</em> ch. 3 (operational laws); deck 02</td><td>The 30-line kernel; M/M/1 against theory; the deck 02 exercises</td></tr>
+        <tr><td><strong>2. LLM inference</strong></td><td>Roofline paper; Pope et al.; PagedAttention; Orca; Sarathi-Serve; <em>How to Scale Your Model</em> inference chapters</td><td>Reproduce deck 03's tables from first principles in a notebook</td></tr>
+        <tr><td><strong>3. Serving simulators and power</strong></td><td>Splitwise, DistServe, Vidur papers; the Vidur and splitwise-sim source; Horowitz on energy; POLCA</td><td>Extend Disaggregated_Inference_Sim with layer-wise KV streaming or chunked prefill; validate with tests</td></tr>
+        <tr><td><strong>4. Hardware and frameworks</strong></td><td>LLMCompass; ASTRA-sim 2.0; PyTorch export, compile-backend and PrivateUse1 docs; the MLIR Toy tutorial; HEIR docs</td><td>A <code>TorchDispatchMode</code> tracer that feeds a real model's operator trace into the simulator</td></tr>
+    </table>
+    </div>
+</section>
+
+<section class="slide" id="slide-02">
+    <div class="slide-number">02</div>
+    <h2>Books: Simulation and Performance Analysis</h2>
+    <ul class="res-list">
+        <li><strong>Averill M. Law, <em>Simulation Modeling and Analysis</em></strong> (McGraw-Hill, 5th ed., 2015)<span class="what">The standard text on discrete-event simulation: input modelling, random-variate generation, output analysis, warm-up, replications, variance reduction. The statistics chapters underpin deck 06.</span></li>
+        <li><strong>Jerry Banks, John S. Carson II, Barry L. Nelson &amp; David M. Nicol, <em>Discrete-Event System Simulation</em></strong> (Pearson, 5th ed., 2010)<span class="what">A gentler companion to Law, with clear treatment of event scheduling and process interaction, and verification and validation.</span></li>
+        <li><strong>Mor Harchol-Balter, <em>Performance Modeling and Design of Computer Systems: Queueing Theory in Action</em></strong> (Cambridge University Press, 2013)<span class="what">Queueing theory written for systems engineers. Little's law, M/G/1, processor sharing, scheduling: exactly the analytic checks a simulator should pass.</span></li>
+        <li><strong>Edward D. Lazowska, John Zahorjan, G. Scott Graham &amp; Kenneth C. Sevcik, <em>Quantitative System Performance</em></strong> (1984), <a href="https://homes.cs.washington.edu/~lazowska/qsp/">free online</a><span class="what">The operational laws (utilisation, Little, forced flow) and mean-value analysis. Old, short, and still the best source for back-of-envelope performance reasoning.</span></li>
+        <li><strong>Raj Jain, <em>The Art of Computer Systems Performance Analysis</em></strong> (Wiley, 1991)<span class="what">Experimental design, measurement, simulation and common mistakes in performance studies. The chapters on presenting results are as useful as the maths.</span></li>
+        <li><strong>Richard M. Fujimoto, <em>Parallel and Distributed Simulation Systems</em></strong> (Wiley, 2000)<span class="what">The reference on PDES: conservative and optimistic synchronisation, Time Warp, lookahead (deck 08).</span></li>
+        <li><strong>Brendan Gregg, <em>Systems Performance</em></strong> (Addison-Wesley, 2nd ed., 2020)<span class="what">Profiling methodology and tools: the "profile first" habit applied to real systems and to your own simulator.</span></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-03">
+    <div class="slide-number">03</div>
+    <h2>Books: Computer and Accelerator Architecture</h2>
+    <ul class="res-list">
+        <li><strong>John L. Hennessy &amp; David A. Patterson, <em>Computer Architecture: A Quantitative Approach</em></strong> (Morgan Kaufmann, 6th ed., 2017)<span class="what">The quantitative method itself; chapter 7 covers domain-specific architectures including the TPU.</span></li>
+        <li><strong>Vivienne Sze, Yu-Hsin Chen, Tien-Ju Yang &amp; Joel Emer, <em>Efficient Processing of Deep Neural Networks</em></strong> (Morgan &amp; Claypool, 2020)<span class="what">Dataflows, memory hierarchies and evaluation methodology for DNN accelerators; the conceptual basis of Timeloop and Accelergy.</span></li>
+        <li><strong>Lieven Eeckhout, <em>Computer Architecture Performance Evaluation Methods</em></strong> (Morgan &amp; Claypool Synthesis Lectures, 2010)<span class="what">A compact survey of exactly this series' subject for CPUs: analytical models, simulation types, sampling (SimPoint, SMARTS), statistical simulation.</span></li>
+        <li><strong>Bruce Jacob, Spencer Ng &amp; David Wang, <em>Memory Systems: Cache, DRAM, Disk</em></strong> (Morgan Kaufmann, 2007)<span class="what">How memory really behaves (banks, refresh, scheduling), for when "bandwidth &times; efficiency" stops being good enough.</span></li>
+        <li><strong>Natalie Enright Jerger, Tushar Krishna &amp; Li-Shiuan Peh, <em>On-Chip Networks</em></strong> (Morgan &amp; Claypool, 2nd ed., 2017)<span class="what">Topologies, routing, flow control and NoC modelling (the authors are behind the Garnet network model in gem5).</span></li>
+        <li><strong>David C. Black &amp; Jack Donovan, <em>SystemC: From the Ground Up</em></strong> (Springer, 2nd ed., 2010)<span class="what">The practical introduction to SystemC and TLM-2.0 virtual-platform modelling. Pair it with the IEEE 1666 standard.</span></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-04">
+    <div class="slide-number">04</div>
+    <h2>Courses and Lecture Series</h2>
+    <ul class="res-list">
+        <li><a href="https://efficientml.ai"><strong>MIT 6.5940 &mdash; TinyML and Efficient Deep Learning Computing</strong></a> (Song Han)<span class="what">Quantisation, pruning, efficient attention, LLM serving systems. Lectures and labs free online.</span></li>
+        <li><a href="https://csg.csail.mit.edu/6.5930/"><strong>MIT 6.5930/1 &mdash; Hardware Architecture for Deep Learning</strong></a> (Sze &amp; Emer)<span class="what">Accelerator design and evaluation; labs use Timeloop and Accelergy.</span></li>
+        <li><a href="https://dlsyscourse.org"><strong>CMU 10-414/714 &mdash; Deep Learning Systems</strong></a> (Tianqi Chen &amp; Zico Kolter)<span class="what">Build a framework from scratch: autodiff, kernels, hardware acceleration. Excellent background for framework integration.</span></li>
+        <li><a href="https://cs149.stanford.edu"><strong>Stanford CS149 &mdash; Parallel Computing</strong></a><span class="what">Parallel programming models, GPUs, and the performance reasoning behind accelerators.</span></li>
+        <li><a href="https://www.youtube.com/@OnurMutluLectures"><strong>Onur Mutlu's Computer Architecture lectures</strong></a> (ETH Z&uuml;rich and CMU, on YouTube)<span class="what">Hundreds of hours on memory systems, DRAM, processing-in-memory and simulation infrastructure; dense and current.</span></li>
+        <li><a href="https://jax-ml.github.io/scaling-book/"><strong><em>How to Scale Your Model</em></strong></a> (Google DeepMind, free online book)<span class="what">Rooflines, sharding and inference arithmetic for transformers on TPUs and GPUs. The best single source for the numbers in deck 03.</span></li>
+        <li><strong>Conference tutorials</strong> (ISCA, MICRO, ASPLOS, HPCA)<span class="what">gem5, ASTRA-sim, SST and Timeloop teams run hands-on tutorials whose slides and recordings are usually posted on the projects' sites.</span></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-05">
+    <div class="slide-number">05</div>
+    <h2>Papers: LLM Serving and Disaggregation</h2>
+    <ul class="res-list">
+        <li><strong>Williams, Waterman &amp; Patterson, "Roofline: An Insightful Visual Performance Model for Multicore Architectures"</strong> (CACM, 2009)<span class="what">The model behind every cost model in this series.</span></li>
+        <li><a href="https://arxiv.org/abs/2211.05102"><strong>Pope et al., "Efficiently Scaling Transformer Inference"</strong></a> (MLSys 2023)<span class="what">Analytical partitioning of inference across chips; how to reason about latency against cost.</span></li>
+        <li><strong>Yu et al., "Orca: A Distributed Serving System for Transformer-Based Generative Models"</strong> (OSDI 2022)<span class="what">Iteration-level scheduling: continuous batching.</span></li>
+        <li><a href="https://arxiv.org/abs/2309.06180"><strong>Kwon et al., "Efficient Memory Management for Large Language Model Serving with PagedAttention"</strong></a> (SOSP 2023)<span class="what">vLLM and paged KV.</span></li>
+        <li><a href="https://arxiv.org/abs/2403.02310"><strong>Agrawal et al., "Taming Throughput-Latency Tradeoff in LLM Inference with Sarathi-Serve"</strong></a> (OSDI 2024)<span class="what">Chunked prefill and stall-free batching.</span></li>
+        <li><a href="https://arxiv.org/abs/2311.18677"><strong>Patel et al., "Splitwise: Efficient Generative LLM Inference Using Phase Splitting"</strong></a> (ISCA 2024)<span class="what">Production characterisation and the case for prompt and token pools.</span></li>
+        <li><a href="https://arxiv.org/abs/2401.09670"><strong>Zhong et al., "DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving"</strong></a> (OSDI 2024)<span class="what">Goodput, and simulation-driven placement.</span></li>
+        <li><a href="https://arxiv.org/abs/2407.00079"><strong>Qin et al., "Mooncake: A KVCache-centric Disaggregated Architecture for LLM Serving"</strong></a> (FAST 2025)<span class="what">Disaggregation at production scale with a distributed KV store.</span></li>
+        <li><a href="https://arxiv.org/abs/2402.16363"><strong>Yuan et al., "LLM Inference Unveiled: Survey and Roofline Model Insights"</strong></a> (2024)<span class="what">A survey of inference optimisations through the roofline lens; introduces LLM-Viewer.</span></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-06">
+    <div class="slide-number">06</div>
+    <h2>Papers: Simulators and Simulation Methodology</h2>
+    <ul class="res-list">
+        <li><a href="https://arxiv.org/abs/2405.05465"><strong>Agrawal et al., "Vidur: A Large-Scale Simulation Framework for LLM Inference"</strong></a> (MLSys 2024)<span class="what">The reference serving simulator: operator profiling, predictors, scheduler models, configuration search.</span></li>
+        <li><a href="https://arxiv.org/abs/2408.05499"><strong>Cho et al., "LLMServingSim: A HW/SW Co-Simulation Infrastructure for LLM Inference Serving at Scale"</strong></a> (IISWC 2024)<span class="what">Serving simulation coupled to accelerator and network simulators.</span></li>
+        <li><a href="https://arxiv.org/abs/2312.03134"><strong>Zhang et al., "A Hardware Evaluation Framework for Large Language Model Inference"</strong></a> (LLMCompass, ISCA 2024)<span class="what">Block-level accelerator description with mapping, area and cost.</span></li>
+        <li><a href="https://arxiv.org/abs/2303.14006"><strong>Won et al., "ASTRA-sim2.0: Modeling Hierarchical Networks and Disaggregated Systems for Large-model Training at Scale"</strong></a> (ISPASS 2023)<span class="what">Layered workload, system and network simulation; Chakra traces.</span></li>
+        <li><strong>Sherwood, Perelman, Hamerly &amp; Calder, "Automatically Characterizing Large Scale Program Behavior"</strong> (SimPoint, ASPLOS 2002)<span class="what">Representative-interval sampling.</span></li>
+        <li><strong>Wunderlich, Wenisch, Falsafi &amp; Hoe, "SMARTS: Accelerating Microarchitecture Simulation via Rigorous Statistical Sampling"</strong> (ISCA 2003)<span class="what">Statistical sampling with confidence bounds.</span></li>
+        <li><strong>Chandy &amp; Misra, "Distributed Simulation: A Case Study in Design and Verification of Distributed Programs"</strong> (IEEE TSE, 1979) and <strong>Jefferson, "Virtual Time"</strong> (ACM TOPLAS, 1985)<span class="what">The founding papers of conservative and optimistic PDES.</span></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-07">
+    <div class="slide-number">07</div>
+    <h2>Hands-On Tutorials and Documentation</h2>
+    <ul class="res-list">
+        <li><a href="https://simpy.readthedocs.io/"><strong>SimPy documentation</strong></a><span class="what">The "SimPy in 10 minutes" guide, topical guides on processes and shared resources, and worked examples (bank, car wash, machine shop).</span></li>
+        <li><a href="https://docs.pytorch.org/docs/stable/torch.compiler_custom_backends.html"><strong>PyTorch: Custom backends for torch.compile</strong></a> and <a href="https://pytorch.org/tutorials/advanced/privateuseone.html"><strong>Facilitating new backend integration with PrivateUse1</strong></a><span class="what">The two official routes for putting a simulator behind PyTorch (deck 09).</span></li>
+        <li><a href="https://onnxruntime.ai/docs/execution-providers/add-execution-provider.html"><strong>ONNX Runtime: Add a new execution provider</strong></a><span class="what">The EP interface, partitioning and registration.</span></li>
+        <li><a href="https://mlir.llvm.org/docs/Tutorials/Toy/"><strong>MLIR Toy tutorial</strong></a><span class="what">Build a small language on MLIR: dialects, lowering, interfaces. The fastest way into MLIR, and so into HEIR.</span></li>
+        <li><a href="https://heir.dev"><strong>HEIR documentation</strong></a><span class="what">Pipelines, dialects, backends and getting-started guides for the FHE compiler.</span></li>
+        <li><a href="https://perfetto.dev/docs/"><strong>Perfetto documentation</strong></a> and <a href="https://ui.perfetto.dev">ui.perfetto.dev</a><span class="what">Trace formats, SQL trace analysis and the UI.</span></li>
+        <li><a href="https://hypothesis.readthedocs.io/"><strong>Hypothesis</strong></a>, <a href="https://docs.cocotb.org/"><strong>cocotb</strong></a> and <a href="https://www.verilator.org/guide/latest/"><strong>Verilator</strong></a><span class="what">Property-based testing, Python testbenches for RTL, and the fast open-source RTL simulator.</span></li>
+        <li><a href="https://pyo3.rs/"><strong>PyO3 user guide</strong></a><span class="what">Writing Python extensions in Rust: the route to a compiled simulator core with a Python front end.</span></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-08">
+    <div class="slide-number">08</div>
+    <h2>Source Code Worth Reading</h2>
+    <p>Reading a mature simulator's source teaches more about structure than any book. Start with the smaller ones.</p>
+    <div class="table-wrap">
+    <table>
+        <tr><th>Repository</th><th>Read it for</th></tr>
+        <tr><td><a href="https://github.com/Mutinifni/splitwise-sim">Mutinifni/splitwise-sim</a></td><td>A compact Python DES of phase-split clusters: the closest relative of this series' simulator</td></tr>
+        <tr><td><a href="https://github.com/microsoft/vidur">microsoft/vidur</a></td><td>Profiling pipeline, runtime predictors, scheduler zoo, configuration search</td></tr>
+        <tr><td><a href="https://github.com/PrincetonUniversity/LLMCompass">PrincetonUniversity/LLMCompass</a></td><td>Hardware description, operator mapping, area and cost models</td></tr>
+        <tr><td><a href="https://github.com/hahnyuan/LLM-Viewer">hahnyuan/LLM-Viewer</a></td><td>A small analytical roofline tool for many models</td></tr>
+        <tr><td><a href="https://github.com/astra-sim/astra-sim">astra-sim/astra-sim</a> and <a href="https://github.com/mlcommons/chakra">mlcommons/chakra</a></td><td>A layered C++ simulator; execution-trace formats</td></tr>
+        <tr><td><a href="https://github.com/ARM-software/SCALE-Sim">ARM-software/SCALE-Sim</a> and <a href="https://github.com/NVlabs/timeloop">NVlabs/timeloop</a></td><td>Systolic-array simulation; loop-nest mapping search</td></tr>
+        <tr><td><a href="https://www.gem5.org/">gem5</a> and <a href="https://sst-simulator.org/">SST</a></td><td>Event queues and ports at industrial scale; Python-configured C++</td></tr>
+        <tr><td><a href="https://docs.vllm.ai/">vLLM</a>, <a href="https://github.com/ai-dynamo/dynamo">ai-dynamo/dynamo</a>, <a href="https://github.com/ai-dynamo/nixl">ai-dynamo/nixl</a>, <a href="https://github.com/kvcache-ai/Mooncake">kvcache-ai/Mooncake</a></td><td>The real schedulers and KV-transfer engines that serving simulators model</td></tr>
+        <tr><td><a href="https://github.com/google/heir">google/heir</a>, <a href="https://github.com/openfheorg/openfhe-development">OpenFHE</a>, <a href="https://github.com/zama-ai/tfhe-rs">zama-ai/tfhe-rs</a></td><td>An MLIR FHE compiler; the reference C++ FHE library; a Rust FHE library</td></tr>
+        <tr><td><a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim">Disaggregated_Inference_Sim</a></td><td>This series' simulator: about 1,150 lines of SimPy plus tests, written to be read</td></tr>
+    </table>
+    </div>
+</section>
+
+<section class="slide" id="slide-09">
+    <div class="slide-number">09</div>
+    <h2>FHE and Photonic Computing</h2>
+    <h3>Fully homomorphic encryption</h3>
+    <ul class="res-list">
+        <li><strong>Craig Gentry, "A Fully Homomorphic Encryption Scheme"</strong> (PhD thesis, Stanford, 2009)<span class="what">Where it started: bootstrapping.</span></li>
+        <li><strong>Cheon, Kim, Kim &amp; Song, "Homomorphic Encryption for Arithmetic of Approximate Numbers"</strong> (CKKS, ASIACRYPT 2017)<span class="what">The scheme of choice for encrypted machine learning.</span></li>
+        <li><strong>Samardzic et al., "F1: A Fast and Programmable Accelerator for Fully Homomorphic Encryption"</strong> (MICRO 2021), and the follow-up <strong>CraterLake</strong> (ISCA 2022)<span class="what">The landmark FHE accelerator papers: why NTT throughput and on-chip memory bandwidth dominate. See also BTS (ISCA 2022) and ARK (MICRO 2022).</span></li>
+        <li><a href="https://fhe.org/resources"><strong>FHE.org resources</strong></a><span class="what">A community-maintained index of tutorials, talks, libraries and papers.</span></li>
+    </ul>
+    <h3>Photonic and optical computing</h3>
+    <ul class="res-list">
+        <li><strong>Joseph W. Goodman, <em>Introduction to Fourier Optics</em></strong> (W. H. Freeman, 4th ed., 2017)<span class="what">Why a lens computes a Fourier transform; the physics behind optical transform engines.</span></li>
+        <li><strong>Shen et al., "Deep Learning with Coherent Nanophotonic Circuits"</strong> (Nature Photonics, 2017)<span class="what">Matrix multiplication in Mach&ndash;Zehnder interferometer meshes.</span></li>
+        <li><strong>Wetzstein et al., "Inference in Artificial Intelligence with Deep Optics and Photonics"</strong> (Nature, 2020) and <strong>Shastri et al., "Photonics for Artificial Intelligence and Neuromorphic Computing"</strong> (Nature Photonics, 2021)<span class="what">Reviews of the field: opportunities, and the conversion, precision and memory challenges a system simulator must capture.</span></li>
+        <li><strong>Optalysys's own published articles</strong><span class="what">The company writes publicly about optical computing and FHE acceleration; read them before any conversation with the team.</span></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-10">
+    <div class="slide-number">10</div>
+    <h2>Related Decks on This GitHub</h2>
+    <ul class="res-list">
+        <li><a href="https://brendanjameslynskey.github.io/Local_LLM_03_vLLM_Architecture/"><strong>Inside vLLM: PagedAttention and Continuous Batching</strong></a><span class="what">The serving engine whose scheduler the simulator models.</span></li>
+        <li><a href="https://brendanjameslynskey.github.io/Local_LLM_05_Multi_GPU_Parallelism/"><strong>Multi-GPU Parallelism</strong></a><span class="what">TP, PP and EP in practice: the communication terms deck 03 left out.</span></li>
+        <li><a href="https://brendanjameslynskey.github.io/Papers_04_Efficient_Inference/"><strong>Key Publications: Efficient Inference</strong></a><span class="what">FlashAttention, MoE, GPTQ, PagedAttention and speculative decoding, summarised.</span></li>
+        <li><a href="https://github.com/BrendanJamesLynskey/AI_MMUL_Unit"><strong>AI_MMUL_Unit</strong></a> and <a href="https://github.com/BrendanJamesLynskey/LLM_Transformer_Decoder_RTL"><strong>LLM_Transformer_Decoder_RTL</strong></a><span class="what">RTL implementations with test suites: the other end of the fidelity ladder from deck 01.</span></li>
+        <li><a href="https://github.com/BrendanJamesLynskey/Interview_RTL_LLM_Accelerators"><strong>Interview_RTL_LLM_Accelerators</strong></a><span class="what">LLM-accelerator design and verification challenges, including memory, dataflow and system integration.</span></li>
+        <li><a href="https://github.com/BrendanJamesLynskey/LLM_Hub_NVIDIA_GPUs"><strong>NVIDIA GPU Architectures</strong></a> and <a href="https://github.com/BrendanJamesLynskey/LLM_Hub_Google_TPUs"><strong>Google TPUs</strong></a><span class="what">The incumbents whose datasheets fill the cost models.</span></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-11">
+    <div class="slide-number">11</div>
+    <h2>Power and Energy</h2>
+    <ul class="res-list">
+        <li><strong>Mark Horowitz, "Computing's Energy Problem (and What We Can Do About It)"</strong> (ISSCC 2014 keynote paper)<span class="what">The energy-per-operation table everyone quotes: why data movement, not arithmetic, sets the energy budget.</span></li>
+        <li><strong>Luiz Andr&eacute; Barroso &amp; Urs H&ouml;lzle, "The Case for Energy-Proportional Computing"</strong> (IEEE Computer, 2007), and <strong>Barroso, H&ouml;lzle &amp; Ranganathan, <em>The Datacenter as a Computer</em></strong> (Morgan &amp; Claypool, 3rd ed., 2018)<span class="what">Static power, utilisation and energy proportionality; PUE and datacentre power provisioning.</span></li>
+        <li><strong>Li et al., "McPAT: An Integrated Power, Area, and Timing Modeling Framework for Multicore and Manycore Architectures"</strong> (MICRO 2009), with <a href="https://github.com/HewlettPackard/mcpat">source</a>, and the <strong>CACTI</strong> SRAM and cache model<span class="what">Architecture-level power from structure; the standard companions to gem5.</span></li>
+        <li><a href="https://github.com/Accelergy-Project/accelergy"><strong>Accelergy</strong></a> (Wu, Emer &amp; Sze, ICCAD 2019)<span class="what">Energy estimation for accelerator designs from per-action energy tables, paired with Timeloop for mappings.</span></li>
+        <li><a href="https://arxiv.org/abs/2308.12908"><strong>Patel et al., "POLCA: Power Oversubscription in LLM Cloud Providers"</strong></a> (2023)<span class="what">How much power LLM inference really draws, and how to oversubscribe and cap safely.</span></li>
+        <li><a href="https://arxiv.org/abs/2408.00741"><strong>Stojkovic et al., "DynamoLLM: Designing LLM Inference Clusters for Performance and Energy Efficiency"</strong></a> (2024)<span class="what">Reconfiguring instances, parallelism and GPU frequency with load to save energy within SLOs.</span></li>
+        <li><a href="https://ml.energy/leaderboard"><strong>ML.ENERGY leaderboard</strong></a> and <a href="https://github.com/ml-energy/zeus"><strong>Zeus</strong></a><span class="what">Measured energy per request for open models on real GPUs, and the library to measure your own: baselines for validating an energy model.</span></li>
+        <li><a href="https://docs.nvidia.com/datacenter/dcgm/latest/index.html"><strong>NVIDIA DCGM documentation</strong></a><span class="what">Reading power, clocks and throttle reasons from GPUs: the data you regress pJ/FLOP and pJ/byte from (deck 07).</span></li>
+    </ul>
+</section>
+
+<!-- ════════════════════════════════════ Footer ════════════════════════════════════ -->
+<footer class="footer">
+    <p>Part of the <a href="https://github.com/BrendanJamesLynskey/LLM_Hub_Inference_Simulators">LLM Inference Simulators series</a> &middot; code: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim">Disaggregated_Inference_Sim</a></p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;"><a href="https://brendanjameslynskey.github.io/InfSim_09_Framework_Integration/">&larr; 09 From PyTorch, ONNX &amp; HEIR to a Simulator</a> &nbsp;&middot;&nbsp; <a href="https://brendanjameslynskey.github.io/InfSim_11_Role_Primer/">11 Role Primer: Simulation &amp; Frameworks Engineer &rarr;</a></p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;"><a href="https://github.com/BrendanJamesLynskey/LLMs#hardware--inference">Back to the LLMs hub</a></p>
+</footer>
+
+<script>
+    // Smooth scroll for TOC links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Subtle fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.slide').forEach(slide => {
+        slide.style.opacity = '0';
+        slide.style.transform = 'translateY(30px)';
+        slide.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(slide);
+    });
+</script>
+
+</body>
+</html>
