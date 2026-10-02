@@ -782,6 +782,11 @@
             .ladder-row { grid-template-columns: 1fr; gap: 0.2rem; }
             .ladder-row .speed { text-align: left; }
         }
+        .concepts { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 6px; padding: 0.75rem 1rem; margin-top: 1.25rem; font-size: 0.88rem; }
+        .concepts p { margin: 0 0 0.4rem; color: var(--text-secondary); }
+        .concepts .chips { display: flex; flex-wrap: wrap; gap: 0.35rem 0.5rem; }
+        .concepts .chips a { border: 1px solid var(--border); border-radius: 999px; padding: 0.1rem 0.6rem; text-decoration: none; font-size: 0.82rem; }
+        .concepts .chips a:hover { border-color: var(--accent); }
     </style>
 </head>
 <body>
@@ -826,6 +831,10 @@
         <li><a href="#slide-11">Power and Energy</a></li>
         <li><a href="#slide-10">Related Decks on This GitHub</a></li>
     </ul>
+    <div class="concepts">
+        <p><strong>Concepts used here, and where they are explained.</strong> Each links to its <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#glossary">series glossary</a> entry: a short explanation, then links to the slides that explain it in depth, in this series, the Local LLM Hosting and Key Publications decks, or the FHE Accelerator Simulators series.</p>
+        <div class="chips"><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-des" title="A simulator whose state changes only at instants (events). A clock, a state, a time-ordered event list and handlers; the clock jumps from one event to the next (next-event time advance), so idle time costs nothing.">Discrete-event simulation (DES)</a><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-queueing" title="Closed-form results that a simulator&#x27;s engine must reproduce: M/M/1 mean time in system 1/(μ−λ); M/D/1 mean wait λS²/(2(1−ρ)) (Pollaczek–Khinchine). The KV link is tested this way.">Queueing theory checks (M/M/1, M/D/1)</a><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline" title="Attainable performance is the lower of peak compute and bandwidth × arithmetic intensity (FLOPs per byte). The ridge point is the intensity at which both limits meet; below it a kernel is memory-bound.">Roofline, arithmetic intensity and ridge point</a><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-disagg" title="Running prefill and decode on separate machine pools (Splitwise, DistServe, Mooncake, NVIDIA Dynamo), so each phase is provisioned and power-managed for its own SLO. The cost is moving the KV cache.">Disaggregated (prefill/decode) serving</a><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-landscape" title="Serving simulators (Vidur, LLMServingSim, SplitwiseSim) model request streams and schedulers; accelerator models (LLMCompass, Timeloop, SCALE-Sim) model compute arrays; system simulators (ASTRA-sim, gem5, SST) model networks and memory.">Serving, accelerator and network simulators</a><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-sampling" title="Simulate representative regions in detail (SimPoint, SMARTS), fast-forward the rest in a cheaper mode, and fork experiments from checkpoints.">Sampling, checkpoints and mode switching</a><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-pdes" title="Splitting one run across cores as logical processes: conservative (Chandy–Misra–Bryant, needs lookahead) or optimistic (Time Warp, rolls back). Worth it for large, loosely coupled models.">Parallel discrete-event simulation (PDES)</a><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-staticdyn" title="Static power (leakage, clocks, always-on logic) is paid whenever a chip is on; dynamic power αCV²f is paid for switching. Energy per operation scales with V², which is why lowering voltage pays quadratically.">Static and dynamic power</a><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-fhe" title="Computing on encrypted data. Ciphertexts are large RNS polynomials; the work is NTTs, modular arithmetic and key switching, and the data movement of ciphertexts and keys dominates.">Fully homomorphic encryption (FHE)</a><a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-photonicpower" title="Optical operations are cheap, but lasers and thermal tuning burn static power, and every DAC/ADC conversion costs energy that grows with resolution. Gains need high reuse per conversion and a busy core.">Power in photonic compute</a></div>
+    </div>
 </section>
 
 <section class="slide" id="slide-01">
@@ -978,6 +987,8 @@
         <li><a href="https://brendanjameslynskey.github.io/Papers_04_Efficient_Inference/"><strong>Key Publications: Efficient Inference</strong></a><span class="what">FlashAttention, MoE, GPTQ, PagedAttention and speculative decoding, summarised.</span></li>
         <li><a href="https://github.com/BrendanJamesLynskey/AI_MMUL_Unit"><strong>AI_MMUL_Unit</strong></a> and <a href="https://github.com/BrendanJamesLynskey/LLM_Transformer_Decoder_RTL"><strong>LLM_Transformer_Decoder_RTL</strong></a><span class="what">RTL implementations with test suites: the other end of the fidelity ladder from deck 01.</span></li>
         <li><a href="https://github.com/BrendanJamesLynskey/Interview_RTL_LLM_Accelerators"><strong>Interview_RTL_LLM_Accelerators</strong></a><span class="what">LLM-accelerator design and verification challenges, including memory, dataflow and system integration.</span></li>
+        <li><a href="https://brendanjameslynskey.github.io/FHE_Hub_Accelerator_Simulators/"><strong>FHE Accelerator Simulators</strong></a> (sister series)<span class="what">The same methods applied to an FHE accelerator running CKKS bootstrapping, with OpenFHE traces, HEIR-compiled programs and optical NTT engines; its glossary covers FHE in depth.</span></li>
+        <li><a href="https://github.com/BrendanJamesLynskey/Mathematics#cryptography"><strong>Cryptography series</strong></a> (Mathematics hub)<span class="what">The mathematics behind FHE (deck 08) and crypto hardware accelerators, including NTT hardware (deck 10).</span></li>
         <li><a href="https://github.com/BrendanJamesLynskey/LLM_Hub_NVIDIA_GPUs"><strong>NVIDIA GPU Architectures</strong></a> and <a href="https://github.com/BrendanJamesLynskey/LLM_Hub_Google_TPUs"><strong>Google TPUs</strong></a><span class="what">The incumbents whose datasheets fill the cost models.</span></li>
     </ul>
 </section>
@@ -999,7 +1010,7 @@
 
 <!-- ════════════════════════════════════ Footer ════════════════════════════════════ -->
 <footer class="footer">
-    <p>Part of the <a href="https://github.com/BrendanJamesLynskey/LLM_Hub_Inference_Simulators">LLM Inference Simulators series</a> &middot; code: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim">Disaggregated_Inference_Sim</a></p>
+    <p>Part of the <a href="https://github.com/BrendanJamesLynskey/LLM_Hub_Inference_Simulators">LLM Inference Simulators series</a> &middot; <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#glossary">glossary: every concept and where it is explained</a> &middot; code: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim">Disaggregated_Inference_Sim</a></p>
     <p style="margin-top: 0.5rem; font-size: 0.8rem;"><a href="https://brendanjameslynskey.github.io/InfSim_09_Framework_Integration/">&larr; 09 From PyTorch, ONNX &amp; HEIR to a Simulator</a> &nbsp;&middot;&nbsp; <a href="https://brendanjameslynskey.github.io/InfSim_11_Role_Primer/">11 Role Primer: Simulation &amp; Frameworks Engineer &rarr;</a></p>
     <p style="margin-top: 0.5rem; font-size: 0.8rem;"><a href="https://github.com/BrendanJamesLynskey/LLMs#hardware--inference">Back to the LLMs hub</a></p>
 </footer>
